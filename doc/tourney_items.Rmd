@@ -1,0 +1,31 @@
+---
+title: "Tourney Item Drop Rates"
+author: "lionbutt_iii"
+date: "2022-11-24"
+output: html_document
+---
+
+```{r}
+library(tidyverse)
+library(googlesheets4)
+library(here)
+library(janitor)
+```
+
+```{r}
+# load data
+mrkent_cupdata <- read_sheet("https://docs.google.com/spreadsheets/d/1XQqc1ifU6X6KuMa1nTLUFQk6xNBQ6SCVkRi0rp19zYY/htmlview#", skip = 3)
+
+# subset data
+prospect_cup <- mrkent_cupdata[,1:2]
+challenger_cup <- mrkent_cupdata[,5:6]
+allstar_cup <- mrkent_cupdata[,9:10]
+champions_cup <- mrkent_cupdata[,13:14]
+
+# clean data
+prospect_cup %>%
+  clean_names() %>%
+  mutate(cert = if_else(str_detect(.[[2]], ".*[Cc]"), TRUE, FALSE),
+         paint = if_else(str_detect(.[[2]], "^Paint"), TRUE, FALSE))
+```
+
